@@ -1,11 +1,28 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import CMPCardProfile from '../../Pengurus/Components/CMPCardProfile';
+import { StyleHome } from '../../Pengurus/Styles/STYLEHome';
+import CMPListMasjid from '../Components/CMPListMasjid';
+import CMPSearchMasjid from '../Components/CMPSaerchMasjid';
+import { useFCJamaah } from '../Function/FCJamaah';
 
 const SCRNHomeJamaah = () => {
+  const {
+    profile,
+    textSearch,
+    setTextSearch,
+    filteredMasjid,
+    navigate,
+  } = useFCJamaah();
   return (
-    <View>
-      <Text />
-    </View>
+    <SafeAreaView style={StyleHome.container}>
+      <CMPCardProfile
+        name={profile.dataProfile.username}
+        onPress={() => navigate('ProfileScreen')}
+      />
+      <CMPSearchMasjid value={textSearch} onChangeText={setTextSearch}  />
+      <CMPListMasjid data={filteredMasjid} />
+    </SafeAreaView>
   );
 };
 

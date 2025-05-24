@@ -8,7 +8,7 @@ interface TFetchConfig {
   version: string;
   isPrivate: boolean;
   path: string;
-  method?: 'GET' | 'DELETE' | 'POST' | 'PUT' | undefined;
+  method?: 'GET' | 'DELETE' | 'POST' | 'PUT' | 'PATCH' | undefined;
   body?: any;
   headers?: Record<string, string>;
   contentType?: string;
@@ -28,7 +28,7 @@ export const createInstance = async ({
     isPrivate ? '/private' : ''
   }/${version}/${path}`;
 
-  console.log('wda: awd', url);
+  console.log('adwa', url);
 
   const token = isPrivate ? await EncryptedStorage.getItem('token') : null;
 

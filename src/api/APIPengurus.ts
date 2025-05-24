@@ -200,11 +200,104 @@ export const APIPengurus = () => {
     }
   };
 
+  const FetchUpdateQurban = async (
+    namaPemberi: string,
+    kategoriHewan: string,
+    jumlahHewan: string,
+    status: string,
+    tanggalPendaftaran: string,
+    tanggalPenyembelihan: string,
+    images: any,
+    idPengurus: string,
+    originalStatus: string,
+  ) => {
+    qurban.setLoadingQurban(true);
+    try {
+      const formData = new FormData();
+      formData.append('nama_pemberi', namaPemberi);
+      formData.append('kategori_hewan', kategoriHewan);
+      formData.append('jumlah_hewan', jumlahHewan);
+      formData.append('status', status);
+      formData.append('tanggal_pendaftaran', tanggalPendaftaran);
+      formData.append('tanggal_penyembelihan', tanggalPenyembelihan);
+      // Hanya tambahkan gambar jika status berubah
+      if (status !== originalStatus && images?.uri) {
+        formData.append('images', {
+          uri: images.uri,
+          name: images.fileName ?? 'photo.jpg',
+          type: images.type ?? 'image/jpeg',
+        } as any);
+      }
+      await createInstance({
+        service: 'api',
+        version: 'v1',
+        isPrivate: true,
+        path: `qurban/${idPengurus}`,
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      }).then(_ => {
+        qurban.setLoadingQurban(false);
+        replace('HomePengurusScreen');
+      });
+    } catch (error) {
+      console.log('error', error);
+      qurban.setLoadingQurban(false);
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Gagal Updata data Qurban!',
+        textBody: 'Silahkan coba kembali',
+      });
+    }
+  };
+
+  const FetchGetSearchMasjid = async (input: string) => {
+    try {
+      const trimmedInput = input.trim();
+      if (trimmedInput.length === 0) {return null;}
+      return await createInstance({
+        service: 'api',
+        version: 'v1',
+        isPrivate: true,
+        path: `search-masjid?nama=${trimmedInput}`,
+        method: 'GET',
+      }).then(res => {
+        const mappedData = mapToMasjidProfile(res?.data);
+        return mappedData;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const FetchGetDetailMasjid = async (name: string) => {
+     try {
+      return await createInstance({
+        service: 'api',
+        version: 'v1',
+        isPrivate: true,
+        path: `qurbans/search?nama_masjid=${name}`,
+        method: 'GET',
+      }).then(res => {
+        const mappedData = mapToQurbanProfile(res?.data);
+        // @ts-ignore
+        qurban.setDataQurban(mappedData);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     FetchGetMasjid,
     FetchRegisMasjid,
     FetchRegisQurban,
     FetchGetQurban,
     FetchDeletQurbanID,
+    FetchUpdateQurban,
+    FetchGetSearchMasjid,
+    FetchGetDetailMasjid,
   };
 };

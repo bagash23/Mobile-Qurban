@@ -6,7 +6,7 @@ interface PengurusState {
   qurban: TQurban;
 }
 
-interface MasjidProfile {
+export interface MasjidProfile {
   namaMasjid: string;
   nomorPengurus: string;
   alamatMasjid: string;
@@ -15,7 +15,7 @@ interface MasjidProfile {
   provinsiMasjid: string;
 }
 
-interface QurbanImageProfile {
+export interface QurbanImageProfile {
   ID: string;
   QurbanID: string;
   FileName: string;

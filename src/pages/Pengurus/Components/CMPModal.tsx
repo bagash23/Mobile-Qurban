@@ -20,6 +20,13 @@ type TStatusQurban = {
   onSelect: (value: string) => void;
 };
 
+type TDeleteQurban = {
+  open: boolean;
+  setOpen: (v: boolean) => void;
+  handleClick: () => void;
+  value: string
+};
+
 const CMPModal = () => {
   const CMPModalTypeHewan = ({
     open,
@@ -89,12 +96,7 @@ const CMPModal = () => {
       </Modal>
     );
   };
-  const CMPModalStatus = ({
-    open,
-    setOpen,
-    value,
-    onSelect,
-  }: TStatusQurban) => {
+  const CMPModalStatus = ({open, setOpen, value, onSelect}: TStatusQurban) => {
     return (
       <Modal isVisible={open}>
         <View style={stylesHewan.modalContainer}>
@@ -157,11 +159,44 @@ const CMPModal = () => {
       </Modal>
     );
   };
+  const CMPModalDelete = ({open, setOpen, handleClick, value}: TDeleteQurban) => (
+    <Modal isVisible={open}>
+      <View style={stylesDelete.modalContainer}>
+        {/* Trash Icon */}
+        <View style={stylesDelete.trashIconContainer}>
+          <AntDesign name="delete" size={40} color="#4da6ff" />
+        </View>
 
+        {/* Confirmation Text */}
+        <Text style={stylesDelete.title}>
+          Apakah kamu yakin untuk menghapus data qurban ini
+        </Text>
+        <Text style={stylesDelete.filename}>
+          {value}
+        </Text>
+
+        {/* Action Buttons */}
+        <View style={stylesDelete.actions}>
+          <TouchableOpacity
+            onPress={() => setOpen(false)}
+            style={[stylesDelete.button, stylesDelete.cancelButton]}>
+            <Text style={stylesDelete.cancelText}>Batal</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={handleClick}
+            style={[stylesDelete.button, stylesDelete.deleteButton]}>
+            <Text style={stylesDelete.deleteText}>Hapus</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
 
   return {
     CMPModalTypeHewan,
     CMPModalStatus,
+    CMPModalDelete,
   };
 };
 
@@ -240,6 +275,58 @@ const stylesHewan = StyleSheet.create({
     color: '#666',
   },
   confirmText: {
+    color: '#fff',
+    fontWeight: '500',
+  },
+});
+
+const stylesDelete = StyleSheet.create({
+  modalContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 20,
+    alignItems: 'center',
+  },
+  trashIconContainer: {
+    backgroundColor: '#e6f2ff',
+    padding: 16,
+    borderRadius: 50,
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: '#333',
+    marginBottom: 8,
+  },
+  filename: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  actions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginHorizontal: 8,
+  },
+  cancelButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  deleteButton: {
+    backgroundColor: '#e53935',
+  },
+  cancelText: {
+    color: '#333',
+    fontWeight: '500',
+  },
+  deleteText: {
     color: '#fff',
     fontWeight: '500',
   },

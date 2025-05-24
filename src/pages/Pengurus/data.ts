@@ -16,7 +16,7 @@ export const ListMenu = [
     title: 'Antrian',
     deskripsi: 'Buat dan kelola nomor antrian atau kupon daging qurban secara otomatis.',
     color: '#9EBC8A',
-    onPress: '',
+    onPress: 'KuponScreen',
   },
 ];
 

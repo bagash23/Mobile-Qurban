@@ -29,7 +29,7 @@ const SCRNHomePengurus = () => {
 
   return (
     <SafeAreaView style={StyleHome.container}>
-      <CMPCardProfile name={profile.dataProfile.username} onPress={() => {}} />
+      <CMPCardProfile name={profile.dataProfile.username} onPress={() => navigate('ProfileScreen')} />
 
       {masjid?.dataMasjid?.length > 0 &&
       masjid.dataMasjid.some(obj => Object.values(obj).some(value => value !== '')) ? (

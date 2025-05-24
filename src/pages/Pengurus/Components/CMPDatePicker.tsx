@@ -1,14 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import moment from 'moment';
 import 'moment/locale/id';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    FlatList,
-    Modal,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { Colors } from '../../../utils/colors';
 import Fonts from '../../../utils/fonts';
@@ -21,9 +21,10 @@ interface Props {
   visible: boolean;
   onClose: () => void;
   onSelectDate: (val: string) => void;
+  value?: string;
 }
 
-const CMPDatePicker = ({visible, onClose, onSelectDate}: Props) => {
+const CMPDatePicker = ({visible, onClose, onSelectDate, value}: Props) => {
   const [currentDate, setCurrentDate] = useState(moment());
   const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(null);
 
@@ -53,6 +54,16 @@ const CMPDatePicker = ({visible, onClose, onSelectDate}: Props) => {
       onSelectDate(selectedDate.format('DD/MM/YYYY'));
     }
   };
+
+  useEffect(() => {
+    if (value) {
+      const parsed = moment(value, 'DD/MM/YYYY');
+      if (parsed.isValid()) {
+        setSelectedDate(parsed);
+        setCurrentDate(parsed);
+      }
+    }
+  }, [value]);
 
   return (
     <Modal visible={visible} transparent animationType="slide">

@@ -12,22 +12,50 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Gap, Header } from '../../../components';
 import Fonts from '../../../utils/fonts';
+import { QurbanImageProfile } from '../../../zustand/usePengurus';
 import { useFCDetailQurban } from '../Function/FCDetailQurban';
 import { StyleHome } from '../Styles/STYLEHome';
 
 const SCRNDetailQurban = () => {
-  const {back, item, navigate, FetchDeletQurbanID} = useFCDetailQurban();
-
-
+  const {
+    back,
+    item,
+    navigate,
+    FetchDeletQurbanID,
+    CMPModalDelete,
+    openDelete,
+    setOpenDelete,
+    profile,
+  } = useFCDetailQurban();
   return (
     <SafeAreaView style={StyleHome.container}>
       <Header title="Detail Qurban" onPress={back} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.imageWrapper}>
-          <Image src={`${BASE_API_URL}${item.images[0].FileUrl}`}
-            style={styles.image}
-            resizeMode="contain"
-          />
+        <View style={styles.imageGallery}>
+          {item.images.length > 0 && (
+            <Image
+              src={`${BASE_API_URL}${item.images[0].FileUrl || item.images[0].FileURL}`}
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={[styles.mainImage, {width: item?.images?.length > 1 ? 200 : '100%'}]}
+              resizeMode="cover"
+            />
+          )}
+          <View style={styles.sideImages}>
+            {item.images
+              .slice(1, 3)
+              .map((img: QurbanImageProfile, index: number) => (
+                <Image
+                  key={index}
+                  // @ts-ignore
+                  src={`${BASE_API_URL}${img?.FileUrl || img?.FileURL}`}
+                  style={[
+                    styles.sideImage,
+                    index === 2 && styles.fullWidthImage,
+                  ]}
+                  resizeMode="cover"
+                />
+              ))}
+          </View>
         </View>
 
         <View style={styles.contentWrapper}>
@@ -37,7 +65,7 @@ const SCRNDetailQurban = () => {
               <Text style={styles.subtitle}>{item.jumlahHewan} ekor</Text>
             </View>
             <TouchableOpacity style={styles.addButton}>
-              <Text style={styles.addButtonText}>Terdaftar</Text>
+              <Text style={styles.addButtonText}>{item?.status}</Text>
             </TouchableOpacity>
           </View>
 
@@ -61,22 +89,32 @@ const SCRNDetailQurban = () => {
             <Text style={styles.sectionTitle}>Status:</Text>
             <Text style={styles.sectionContent}>{item.status}</Text>
           </View>
-          <View style={styles.section}>
-            <Button
-              isLoading={false}
-              onPress={() => navigate('')}
-              title="Edit Data Qurban"
-            />
-            <Gap height={12} />
-            <Button
-              variant="outlined"
-              isLoading={false}
-              onPress={() => FetchDeletQurbanID(item?.images?.[0]?.QurbanID)}
-              title="Hapus Data Qurban"
-            />
-          </View>
+          {profile?.dataProfile?.role === 'Pengurus' && (
+            <View style={styles.section}>
+              {item?.status !== 'Distribusi' && (
+                <Button
+                  isLoading={false}
+                  onPress={() => navigate('EditQurbanScreen', {item: item})}
+                  title="Edit Data Qurban"
+                />
+              )}
+              <Gap height={12} />
+              <Button
+                variant="outlined"
+                isLoading={false}
+                onPress={() => setOpenDelete(true)}
+                title="Hapus Data Qurban"
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
+      <CMPModalDelete
+        open={openDelete}
+        setOpen={setOpenDelete}
+        handleClick={() => FetchDeletQurbanID(item?.images?.[0]?.QurbanID)}
+        value={item?.namaPemberi}
+      />
     </SafeAreaView>
   );
 };
@@ -84,15 +122,28 @@ const SCRNDetailQurban = () => {
 export default SCRNDetailQurban;
 
 const styles = StyleSheet.create({
-  imageWrapper: {
-    alignItems: 'center',
-    marginTop: 20,
+  imageGallery: {
+    flexDirection: 'row',
+    padding: 16,
+    gap: 10,
   },
-  image: {
-    width: 250,
+  mainImage: {
     height: 250,
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: '#eee',
+  },
+  sideImages: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  sideImage: {
+    width: '100%',
+    height: 120,
+    borderRadius: 8,
+    backgroundColor: '#eee',
+  },
+  fullWidthImage: {
+    height: 90,
   },
   contentWrapper: {
     backgroundColor: '#fff',

@@ -20,38 +20,35 @@ const CMPListQurban = ({
 }: Props) => {
   return (
     <View style={styles.container}>
-      {data.map((item, index) => (
-        <>
-          <Text style={styles.title}>Detail Qurban - {year}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              navigate('DetailQurbanScreen', {item});
-            }}
-            key={index}
-            style={styles.itemContainer}>
-            <View style={styles.left}>
-              <Image
-                // @ts-ignore
-                src={`${BASE_API_URL}${item.images[0].FileUrl}`}
-                style={styles.image}
-              />
+      <Text style={styles.title}>Detail Qurban - {year}</Text>
 
-              <View style={styles.info}>
-                <Text style={styles.category}>{item.kategoriHewan}</Text>
-                <Text style={styles.name}>{item.namaPemberi}</Text>
-                <Text style={styles.date}>
-                  {item.tanggalPendaftaran} → {item.tanggalPenyembelihan}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.right}>
-              <Text style={[styles.amount, {color: Colors.primary}]}>
-                {item.jumlahHewan} ekor
+      {data.map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          onPress={() => navigate('DetailQurbanScreen', { item })}
+          style={styles.itemContainer}>
+          <View style={styles.left}>
+            <Image
+            // @ts-ignore
+              src={`${BASE_API_URL}${item.images[0].FileUrl || item.images[0].FileURL}`}
+              style={styles.image}
+            />
+            <View style={styles.info}>
+              <Text style={styles.category}>{item.kategoriHewan}</Text>
+              <Text style={styles.name}>{item.namaPemberi}</Text>
+              <Text style={styles.date}>
+                {item.tanggalPendaftaran} → {item.tanggalPenyembelihan}
               </Text>
-              <Text style={styles.status}>{item.status}</Text>
             </View>
-          </TouchableOpacity>
-        </>
+          </View>
+
+          <View style={styles.right}>
+            <Text style={[styles.amount, { color: Colors.primary }]}>
+              {item.jumlahHewan} ekor
+            </Text>
+            <Text style={styles.status}>{item.status}</Text>
+          </View>
+        </TouchableOpacity>
       ))}
     </View>
   );
@@ -61,8 +58,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     paddingHorizontal: 16,
+    paddingVertical: 16,
     borderRadius: 12,
-    elevation: 2,
   },
   title: {
     fontSize: 16,

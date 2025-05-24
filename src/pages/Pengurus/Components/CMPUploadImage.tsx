@@ -7,7 +7,7 @@ import Fonts from '../../../utils/fonts';
 interface IProps {
     filename: string;
     uri: string
-    onPressImagePicker: () => void;
+    onPressImagePicker?: () => void;
 }
 
 const CMPUploadImage = ({filename, uri, onPressImagePicker}: IProps) => {

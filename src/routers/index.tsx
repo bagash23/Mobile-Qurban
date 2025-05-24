@@ -2,12 +2,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import {
   SCRNDaftar,
+  SCRNDetail,
   SCRNDetailQurban,
   SCRNEditQurban,
   SCRNGetStarted,
   SCRNHomeJamaah,
   SCRNHomePengurus,
+  SCRNKupon,
   SCRNLogin,
+  SCRNProfile,
   SCRNQurban,
   SCRNRegistMasjid,
   SCRNSplashScreen,
@@ -35,10 +38,13 @@ const Router = () => {
       <Stack.Screen name="QurbanScreen" component={SCRNQurban} />
       <Stack.Screen name="DetailQurbanScreen" component={SCRNDetailQurban} />
       <Stack.Screen name="EditQurbanScreen" component={SCRNEditQurban} />
+      <Stack.Screen name="KuponScreen" component={SCRNKupon} />
+      <Stack.Screen name="ProfileScreen" component={SCRNProfile} />
       {/* ENd Pengurus */}
 
       {/* Jamaah */}
       <Stack.Screen name="HomeJamaahScreen" component={SCRNHomeJamaah} />
+      <Stack.Screen name="DetailIbadahScreen" component={SCRNDetail} />
       {/* End Jamaah */}
     </Stack.Navigator>
   );
